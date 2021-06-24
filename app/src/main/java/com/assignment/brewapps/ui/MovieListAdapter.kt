@@ -47,14 +47,14 @@ class MovieListAdapter(private val listener: (Long) -> Unit) :
                             higherPosterMovieName.visibility=View.GONE
                             return true
                         }
-                        MotionEvent.ACTION_DOWN->{
-                            higherPosterMovieName.visibility=View.VISIBLE
-                            return true
-                        }
-                        MotionEvent.ACTION_UP->{
-                            higherPosterMovieName.visibility=View.GONE
-                            return true
-                        }
+//                        MotionEvent.ACTION_DOWN->{
+//                            higherPosterMovieName.visibility=View.VISIBLE
+//                            return true
+//                        }
+//                        MotionEvent.ACTION_UP->{
+//                            higherPosterMovieName.visibility=View.GONE
+//                            return true
+//                        }
 
 
                     }

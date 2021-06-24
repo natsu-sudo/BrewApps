@@ -13,4 +13,6 @@
     <string name="error_unknown">Unknown error. %1$s</string>
     <string name="ok">Ok</string>
     <string name="network_error">Network Error</string>
+    <string name="enter_movie_name">Enter Movie Name</string>
+    <string name="get_thum_nail"><![CDATA[<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/%1$s\" frameborder=\"0\" allowfullscreen></iframe>\")]]></string>
 </resources>

@@ -27,5 +27,7 @@ data class Movies(
     val overView:String,
     @ColumnInfo(name = "vote_average")
     @SerializedName("vote_average")
-    val rating:Double
+    val rating:Double,
+    @ColumnInfo(name = "link_to_video")
+    val linksToVideo:String?=null
 )
