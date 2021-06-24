@@ -6,15 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/youtube_link"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/roundedCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_pixel_5"
+        android:elevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </ImageView>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/trailer_thumb_nail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="@string/app_name" />
+
+            <ImageView
+                android:id="@+id/play_video"
+                android:layout_width="@dimen/density_pixel_100"
+                android:layout_height="@dimen/density_pixel_100"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_baseline_play_circle_outline_24" />
+
+
+        </FrameLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

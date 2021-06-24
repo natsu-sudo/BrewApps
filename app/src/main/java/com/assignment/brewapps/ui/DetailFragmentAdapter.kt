@@ -1,38 +1,48 @@
 package com.assignment.brewapps.ui
 
-import android.annotation.SuppressLint
-import android.os.Build
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import androidx.annotation.RequiresApi
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.assignment.brewapps.R
 import com.assignment.brewapps.pojo.KeyLinks
+import com.bumptech.glide.Glide
 
-class DetailFragmentAdapter(private val listener: (String) -> Unit) : ListAdapter<KeyLinks, DetailFragmentAdapter.ViewHolder>(
+
+class DetailFragmentAdapter() : ListAdapter<KeyLinks, DetailFragmentAdapter.ViewHolder>(
     DiffCallbackKey()
 ) {
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SetJavaScriptEnabled")
-    class ViewHolder(val view: View):RecyclerView.ViewHolder(view) {
-        val videoWeb=view.findViewById<WebView>(R.id.youtube_link)
+    inner class ViewHolder(private val view: View):RecyclerView.ViewHolder(view) {
+        private val thumbNail:ImageView=view.findViewById(R.id.trailer_thumb_nail)
+        private val play_video:ImageView=view.findViewById(R.id.play_video)
 
-        init {
-
-        }
 
         fun onBind(item: KeyLinks) {
-            videoWeb.loadData("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/eWEF1Zrmdow\" frameborder=\"0\" allowfullscreen></iframe>","text/html" , "utf-8" )
+            Glide.with(itemView)
+                .load(view.context.getString(R.string.you_tube_thub, item.key))
+                .error(R.drawable.error_default)
+                .into(thumbNail)
+            play_video.setOnClickListener {
+                val intent=Intent(Intent.ACTION_VIEW)
+                if (intent.resolveActivity(itemView.context.packageManager)!=null){
+                    itemView.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(view.context.getString(R.string.you_tube_video_url,item.key))))
+                }else{
+                    Toast.makeText(itemView.context,itemView.context.getString(R.string.no_app), Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             R.layout.movie_trailer_layout,
@@ -42,7 +52,6 @@ class DetailFragmentAdapter(private val listener: (String) -> Unit) : ListAdapte
         return ViewHolder(view)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }

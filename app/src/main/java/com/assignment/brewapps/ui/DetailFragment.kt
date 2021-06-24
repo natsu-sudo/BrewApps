@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.assignment.brewapps.R
 import com.assignment.brewapps.databinding.FragmentDetailBinding
 import com.assignment.brewapps.pojo.KeyLinks
 import com.assignment.brewapps.viewmodel.ViewModelDetail
 import com.assignment.brewapps.viewmodel.ViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val TAG = "DetailFragment"
 class DetailFragment : Fragment() {
@@ -27,9 +30,7 @@ class DetailFragment : Fragment() {
         }!!
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding= FragmentDetailBinding.inflate(inflater, container, false)
@@ -42,10 +43,13 @@ class DetailFragment : Fragment() {
         viewModelDetailFragment.setMovieId(movieId)
 
         binding.recylerViewYoutube.apply {
-            layoutManager=LinearLayoutManager(context)
-            adapter= DetailFragmentAdapter{
+            layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+            adapter= DetailFragmentAdapter()
+            hasFixedSize()
+        }
 
-            }
+        binding.ratingStart.apply {
+            layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
             hasFixedSize()
         }
 
@@ -57,11 +61,23 @@ class DetailFragment : Fragment() {
                 it.linksToVideo.split(":").forEach {
                     mutableList.add(KeyLinks(it))
                 }
-                Log.d(TAG, "onViewCreated 2: $mutableList")
-                Log.d(TAG, "onViewCreated: 3"+mutableList[1].key)
                 (binding.recylerViewYoutube.adapter as DetailFragmentAdapter).submitList(mutableList)
             }
         })
+
+        viewModelDetailFragment.getMovies.observe(viewLifecycleOwner, Observer {
+            binding.movieName.text =it.title
+            binding.releaseDate.text=getString(R.string.release_date,it.releaseDate.readableFormat())
+            binding.movieOverview.text=it.overView
+            binding.ratingStart.adapter=RatingAdapter(it.rating.toInt())
+        })
+
+
+    }
+
+    fun Date.readableFormat(): String{
+        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(this)
     }
 
 
