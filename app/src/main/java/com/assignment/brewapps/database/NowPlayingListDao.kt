@@ -20,4 +20,7 @@ interface NowPlayingListDao {
     @Delete
     suspend fun delete(movies: Movies)
 
+    @Query("Select * from now_playing where original_title LIKE '%' || :search || '%'")
+     fun searchForList(search:String):LiveData<List<Movies>>
+
 }

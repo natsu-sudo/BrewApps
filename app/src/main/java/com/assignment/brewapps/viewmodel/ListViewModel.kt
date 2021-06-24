@@ -13,9 +13,12 @@ import kotlinx.coroutines.withContext
 class ListViewModel(context: Context):ViewModel() {
     private val movieDatabase= MovieListRepository(context)
     private var liveStatus= MutableLiveData<LoadingStatus>()
+    private var searchMovies=MutableLiveData<String>()
     val status get() = liveStatus
 
     val getList: LiveData<List<Movies>> = getMovieList()
+    val searchResult=Transformations.switchMap(searchMovies, ::searchMovies)
+
 
     private fun getMovieList(): LiveData<List<Movies>> {
         return movieDatabase.getMovieList()
@@ -42,5 +45,13 @@ class ListViewModel(context: Context):ViewModel() {
                    movieDatabase.deleteSingleMovie(movies )
                }
            }
+    }
+
+    private fun searchMovies(search:String):LiveData<List<Movies>> {
+        return movieDatabase.searchQuery(search)
+    }
+
+    fun setSearch(search: String) {
+            searchMovies.value=search
     }
 }

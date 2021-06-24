@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -90,6 +92,11 @@ class NowPlayingFragment : Fragment() {
             }
         })
 
+        listViewModel.searchResult.observe(viewLifecycleOwner, Observer {
+            (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
+            (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
+        })
+
 
 
         listViewModel.status.observe(viewLifecycleOwner, Observer { loadingStatus ->
@@ -127,6 +134,22 @@ class NowPlayingFragment : Fragment() {
 
         }
 
+
+        binding.typeMovieName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d(TAG, "onTextChanged: $s  $start $before $count")
+                listViewModel.setSearch(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
     }
 
     private fun showError(errorCode: ErrorCode?, message: String?) {

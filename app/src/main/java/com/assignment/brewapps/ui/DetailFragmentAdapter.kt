@@ -1,6 +1,5 @@
 package com.assignment.brewapps.ui
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +20,7 @@ class DetailFragmentAdapter() : ListAdapter<KeyLinks, DetailFragmentAdapter.View
 ) {
     inner class ViewHolder(private val view: View):RecyclerView.ViewHolder(view) {
         private val thumbNail:ImageView=view.findViewById(R.id.trailer_thumb_nail)
-        private val play_video:ImageView=view.findViewById(R.id.play_video)
+        private val playVideo:ImageView=view.findViewById(R.id.play_video)
 
 
         fun onBind(item: KeyLinks) {
@@ -30,7 +28,7 @@ class DetailFragmentAdapter() : ListAdapter<KeyLinks, DetailFragmentAdapter.View
                 .load(view.context.getString(R.string.you_tube_thub, item.key))
                 .error(R.drawable.error_default)
                 .into(thumbNail)
-            play_video.setOnClickListener {
+            playVideo.setOnClickListener {
                 val intent=Intent(Intent.ACTION_VIEW)
                 if (intent.resolveActivity(itemView.context.packageManager)!=null){
                     itemView.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(view.context.getString(R.string.you_tube_video_url,item.key))))
