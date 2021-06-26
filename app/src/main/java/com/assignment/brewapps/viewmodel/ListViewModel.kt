@@ -14,6 +14,7 @@ class ListViewModel(context: Context):ViewModel() {
     private val movieDatabase= MovieListRepository(context)
     private var liveStatus= MutableLiveData<LoadingStatus>()
     private var searchMovies=MutableLiveData<String>()
+    private var deleteMovies= MutableLiveData<Movies>()
     val status get() = liveStatus
 
     val getList: LiveData<List<Movies>> = getMovieList()
@@ -40,11 +41,19 @@ class ListViewModel(context: Context):ViewModel() {
     }
 
      fun deleteSingleMovie(movies:Movies){
+         deleteMovies.value=movies
            viewModelScope.launch {
                withContext(Dispatchers.IO){
                    movieDatabase.deleteSingleMovie(movies )
                }
            }
+    }
+
+    val deleteMovie:LiveData<List<Movies>> =Transformations.switchMap(deleteMovies,
+    ::getListFrom)
+
+    private fun getListFrom(movies: Movies): LiveData<List<Movies>> {
+        return movieDatabase.getMovieList()
     }
 
     private fun searchMovies(search:String):LiveData<List<Movies>> {

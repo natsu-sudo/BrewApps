@@ -61,7 +61,9 @@ class NowPlayingFragment : Fragment() {
                     )
                 )
             }
-            setHasFixedSize(true)
+
+            isNestedScrollingEnabled = false;
+            setHasFixedSize(false);
             hasFixedSize()
         }
         val swipeRight = ItemTouchHelper(object :
@@ -93,6 +95,10 @@ class NowPlayingFragment : Fragment() {
         })
 
         listViewModel.searchResult.observe(viewLifecycleOwner, Observer {
+            (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
+            (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
+        })
+        listViewModel.deleteMovie.observe(viewLifecycleOwner, Observer {
             (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
             (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
         })

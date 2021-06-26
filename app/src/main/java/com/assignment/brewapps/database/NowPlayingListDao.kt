@@ -8,7 +8,7 @@ import com.assignment.brewapps.pojo.Movies
 @Dao
 interface NowPlayingListDao {
 
-    @Query("select * from now_playing ")
+    @Query("select * from now_playing order by release_date")
     fun getMovieListFromDB(): LiveData<List<Movies>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -20,7 +20,7 @@ interface NowPlayingListDao {
     @Delete
     suspend fun delete(movies: Movies)
 
-    @Query("Select * from now_playing where original_title LIKE '%' || :search || '%'")
+    @Query("Select * from now_playing where original_title LIKE '%' || :search || '%' order by release_date")
      fun searchForList(search:String):LiveData<List<Movies>>
 
 }

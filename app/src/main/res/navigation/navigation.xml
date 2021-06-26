@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_now_playing" >
         <action
             android:id="@+id/action_nowPlayingFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/nowPlayingFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -22,5 +24,8 @@
         <argument
             android:name="id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_detailFragment_to_nowPlayingFragment2"
+            app:destination="@id/nowPlayingFragment" />
     </fragment>
 </navigation>
