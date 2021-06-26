@@ -31,6 +31,7 @@ class MovieListRepository(context: Context) {
         return moviesListRepository.searchForList(search)
     }
 
+
     suspend fun fetchFromNetwork()=try {
         val result=apiService.getMovieList(Constants.NOW_PLAYING)
         Log.d("TAG", "fetchFromNetwork: $result")

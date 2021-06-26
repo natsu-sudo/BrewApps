@@ -62,7 +62,7 @@ class NowPlayingFragment : Fragment() {
                 )
             }
 
-            isNestedScrollingEnabled = false;
+            isNestedScrollingEnabled = true;
             setHasFixedSize(false);
             hasFixedSize()
         }
@@ -77,9 +77,7 @@ class NowPlayingFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                with(listViewModel) {
-                    deleteSingleMovie(getList.value!![viewHolder.adapterPosition])
-                }
+               listViewModel.deleteFromListAndMovieDb(viewHolder.adapterPosition)
             }
 
         })
@@ -87,8 +85,6 @@ class NowPlayingFragment : Fragment() {
 
         listViewModel.getList.observe(viewLifecycleOwner, Observer {
             (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
-            (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
-            Log.d(TAG, "onViewCreated: "+it.size)
             if (it.isEmpty()) {
                 listViewModel.fetchFromNetwork()
             }
@@ -96,11 +92,6 @@ class NowPlayingFragment : Fragment() {
 
         listViewModel.searchResult.observe(viewLifecycleOwner, Observer {
             (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
-            (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
-        })
-        listViewModel.deleteMovie.observe(viewLifecycleOwner, Observer {
-            (binding.listRecycler.adapter as MovieListAdapter).submitList(it)
-            (binding.listRecycler.adapter as MovieListAdapter).notifyDataSetChanged()
         })
 
 

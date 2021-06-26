@@ -22,5 +22,4 @@ interface NowPlayingListDao {
 
     @Query("Select * from now_playing where original_title LIKE '%' || :search || '%' order by release_date")
      fun searchForList(search:String):LiveData<List<Movies>>
-
 }

@@ -1,6 +1,5 @@
 package com.assignment.brewapps.ui
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,32 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.get
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.assignment.brewapps.Constants
 import com.assignment.brewapps.R
 import com.assignment.brewapps.pojo.Movies
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
-import kotlin.math.log
 
-class MovieListAdapter(private val listener: (Long) -> Unit) :
-    ListAdapter<Movies, MovieListAdapter.ViewHolder>(DiffCallback()) {
-
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class MovieListAdapterList(private val listener: (Long) -> Unit):
+    RecyclerView.Adapter<MovieListAdapterList.ViewHolder>() {
+    inner class ViewHolder(private val view: View):RecyclerView.ViewHolder(view) {
         private val higherCard: MaterialCardView =view.findViewById(R.id.more_than_7_card)
         private val lowerCard: MaterialCardView =view.findViewById(R.id.less_than_7_card)
-        private val backDropImage:ImageView=view.findViewById(R.id.vote_more_than_seven)
-        private val moviePosterForLowerCard:ImageView=view.findViewById(R.id.movie_poster)
-        private val movieName:TextView=view.findViewById(R.id.movie_name_less)
-        private val movieOverView:TextView=view.findViewById(R.id.movie_over_view_less)
-        private val higherPosterMovieName:TextView=view.findViewById(R.id.higher_poster_movie_name)
+        private val backDropImage: ImageView =view.findViewById(R.id.vote_more_than_seven)
+        private val moviePosterForLowerCard: ImageView =view.findViewById(R.id.movie_poster)
+        private val movieName: TextView =view.findViewById(R.id.movie_name_less)
+        private val movieOverView: TextView =view.findViewById(R.id.movie_over_view_less)
+        private val higherPosterMovieName: TextView =view.findViewById(R.id.higher_poster_movie_name)
 
         init {
             itemView.setOnClickListener {
-                listener.invoke(getItem(adapterPosition).id)
+                listener.invoke(listOfMovies[adapterPosition].id)
             }
             itemView.setOnTouchListener(object : View.OnTouchListener {
                 override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -56,7 +50,6 @@ class MovieListAdapter(private val listener: (Long) -> Unit) :
 
 
         fun onBind(item: Movies) {
-            Log.d("Rating", "onBind: "+item.rating)
             if (item.rating>=7){
                 showHigherRatingCards(item)
             }else{
@@ -86,25 +79,33 @@ class MovieListAdapter(private val listener: (Long) -> Unit) :
         }
     }
 
+    private var listOfMovies= mutableListOf<Movies>()
+
+    fun setList(list:MutableList<Movies>){
+        listOfMovies=list
+        Log.d("TAG", "addList: 2 "+listOfMovies.size)
+    }
+
+    fun addList(list: MutableList<Movies>){
+        list.forEach {
+            listOfMovies.add(it)
+        }
+        Log.d("TAG", "addList: "+listOfMovies.size)
+    }
+
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.lists, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+        holder.onBind(listOfMovies[position])
     }
 
-
-
-}
-
-class DiffCallback : DiffUtil.ItemCallback<Movies>() {
-    override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
-        return oldItem == newItem
+    override fun getItemCount(): Int {
+        return listOfMovies.size
     }
 }
